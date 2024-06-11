@@ -1,8 +1,5 @@
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
-import {
-  XenovaTransformersEmbeddings,
-  getEmbeddingsInstance,
-} from "../lib/embed";
+import { getEmbeddingsInstance } from "../lib/embed";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 
 self.onmessage = async (e: MessageEvent) => {

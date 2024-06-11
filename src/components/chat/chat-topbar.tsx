@@ -1,19 +1,13 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import React, {useState} from "react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import * as webllm from "@mlc-ai/web-llm";
 import { Button } from "../ui/button";
 import { CaretSortIcon, HamburgerMenuIcon } from "@radix-ui/react-icons";
 import { Sidebar } from "../sidebar";
-import { Message } from "ai/react";
 import useChatStore from "@/hooks/useChatStore";
-import { Models, Model } from "@/lib/models";
+import { Models } from "@/lib/models";
 
 interface ChatTopbarProps {
   chatId?: string;
@@ -21,8 +15,8 @@ interface ChatTopbarProps {
 }
 
 export default function ChatTopbar({ chatId, stop }: ChatTopbarProps) {
-  const [open, setOpen] = React.useState(false);
 
+  const [open, setOpen] = useState(false);
   // Zustand store
   const selectedModel = useChatStore((state) => state.selectedModel);
   const setSelectedModel = useChatStore((state) => state.setSelectedModel);

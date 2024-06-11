@@ -33,7 +33,7 @@ export const WebLLMProvider: React.FC<{ children: React.ReactNode }> = ({
     if (modelHasChanged) {
       setEngine(null);
     }
-  }, [selectedModel]);
+  }, [selectedModel, modelHasChanged, setEngine]);
 
   useEffect(() => {
     useChatStore.persist.rehydrate();

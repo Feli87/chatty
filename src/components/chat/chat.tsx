@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import ChatTopbar from "./chat-topbar";
 import ChatList from "./chat-list";
 import ChatBottombar from "./chat-bottombar";
@@ -17,21 +17,14 @@ import {
 } from "../ui/dialog";
 import { Button } from "../ui/button";
 
-export default function Chat({
-  handleSubmit,
-  stop,
-  chatId,
-  loadingSubmit,
-  isMobile,
-  messages,
-  onRegenerate,
-}: ChatProps) {
+export default function Chat({ handleSubmit, stop, chatId, loadingSubmit, isMobile, messages, onRegenerate }: ChatProps) {
+
   const files = useChatStore((state) => state.files);
   const setFiles = useChatStore((state) => state.setFiles);
   const fileText = useChatStore((state) => state.fileText);
   const setFileText = useChatStore((state) => state.setFileText);
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="flex flex-col justify-between w-full max-w-3xl h-full  ">
@@ -59,9 +52,13 @@ export default function Chat({
                 ))}
               </div>
             </div>
-            <DialogTrigger className="absolute -top-1.5 -right-1.5 text-white cursor-pointer  bg-red-500 hover:bg-red-600 w-4 h-4 rounded-full flex items-center justify-center">
+
+            <DialogTrigger 
+              className="absolute -top-1.5 -right-1.5 text-white cursor-pointer  bg-red-500 hover:bg-red-600 w-4 h-4 rounded-full flex items-center justify-center"
+            >
               <Cross2Icon className="w-3 h-3" />
             </DialogTrigger>
+
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>Are you sure?</DialogTitle>
@@ -82,12 +79,7 @@ export default function Chat({
                 >
                   Remove
                 </Button>
-                <Button
-                  variant="secondary"
-                  onClick={() => {
-                    setOpen(false);
-                  }}
-                >
+                <Button variant="secondary" onClick={() => setOpen(false)}>
                   Cancel
                 </Button>
               </div>
@@ -103,6 +95,7 @@ export default function Chat({
         stop={stop}
         messages={messages}
       />
+      
     </div>
   );
 }
