@@ -4,7 +4,7 @@ import useChatStore from "@/hooks/useChatStore";
 import * as webllm from "@mlc-ai/web-llm";
 import { Model } from "./models";
 import { Document } from "@langchain/core/documents";
-import { XenovaTransformersEmbeddings, getEmbeddingsInstance } from "./embed";
+import { getEmbeddingsInstance } from "./embed";
 
 export default class WebLLMHelper {
   engine: webllm.MLCEngineInterface | null;
@@ -74,6 +74,7 @@ export default class WebLLMHelper {
   ): AsyncGenerator<string> {
     const storedMessages = useChatStore.getState().messages;
 
+    //@ts-ignore
     const completion = await engine.chat.completions.create({
       stream: true,
       messages: [
@@ -91,12 +92,14 @@ export default class WebLLMHelper {
       temperature: 0.6,
       max_gen_len: 1024,
     });
+
     for await (const chunk of completion) {
       const delta = chunk.choices[0].delta.content;
       if (delta) {
         yield delta;
       }
-    }
+    };
+
   }
 
   // Handle document processing using WebWorker to avoid freezing the UI
@@ -149,6 +152,7 @@ export default class WebLLMHelper {
         fileType,
         userInput,
       });
+
     });
   }
 }

@@ -17,30 +17,25 @@ const useSpeechToText = (options: SpeechRecognitionOptions = {}) => {
       return;
     }
 
-    const recognition = new window.webkitSpeechRecognition();
-    recognitionRef.current = recognition;
-
-    recognition.interimResults = options.interimResults || true;
-    recognition.lang = options.lang || "en-US";
-    recognition.continuous = options.continuous || false;
+    let recognition = new window.webkitSpeechRecognition();
+          recognitionRef.current = recognition;
+          recognition.interimResults = options.interimResults || false;
+          recognition.lang = options.lang || "en-US";
+          recognition.continuous = options.continuous || false;
 
     if ("webkitSpeechGrammarList" in window) {
-      const grammar =
-        "#JSGF V1.0; grammar punctuation; public <punc> = . | , | ! | ; | : ;";
-      const speechRecognitionList = new window.webkitSpeechGrammarList();
-      speechRecognitionList.addFromString(grammar, 1);
+      let grammar = "#JSGF V1.0; grammar punctuation; public <punc> = . | , | ! | ; | : ;";
+      let speechRecognitionList = new window.webkitSpeechGrammarList();
+          speechRecognitionList.addFromString(grammar, 1);
       recognition.grammars = speechRecognitionList;
     }
 
     recognition.onresult = (event: SpeechRecognitionEvent) => {
       let text = "";
-
-      for (let i = 0; i < event.results.length; i++) {
+      for (let i = event.resultIndex; i < event.results.length; i++) {
         text += event.results[i][0].transcript;
       }
-
-      // Always capitalize the first letter
-      setTranscript(text.charAt(0).toUpperCase() + text.slice(1));
+      setTranscript(prevTranscript => recognition.interimResults ? prevTranscript + text : text);
     };
 
     recognition.onerror = (event) => {
@@ -49,7 +44,6 @@ const useSpeechToText = (options: SpeechRecognitionOptions = {}) => {
 
     recognition.onend = () => {
       setIsListening(false);
-      setTranscript("");
     };
 
     return () => {
@@ -57,7 +51,7 @@ const useSpeechToText = (options: SpeechRecognitionOptions = {}) => {
         recognitionRef.current.stop();
       }
     };
-  }, []);
+  }, [options]);
 
   const startListening = () => {
     if (recognitionRef.current && !isListening) {
@@ -82,3 +76,4 @@ const useSpeechToText = (options: SpeechRecognitionOptions = {}) => {
 };
 
 export default useSpeechToText;
+

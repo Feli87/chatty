@@ -9,35 +9,20 @@ import remarkGfm from "remark-gfm";
 import { Button } from "../ui/button";
 import { ChatProps } from "@/lib/types";
 import MessageLoading from "../ui/message-loading";
-import {
-  CheckIcon,
-  CopyIcon,
-  FileTextIcon,
-  RefreshCcw,
-  Volume2,
-  VolumeX,
-} from "lucide-react";
 import useChatStore from "@/hooks/useChatStore";
 import ButtonWithTooltip from "../button-with-tooltip";
+//icons
+import { CheckIcon, CopyIcon, FileTextIcon, RefreshCcw, Volume2, VolumeX } from "lucide-react";
 
-export default function ChatList({
-  messages,
-  loadingSubmit,
-  onRegenerate,
-}: ChatProps) {
+export default function ChatList({ messages, loadingSubmit, onRegenerate }: ChatProps) {
+
   const bottomRef = useRef<HTMLDivElement>(null);
-  const [name, setName] = React.useState<string>("");
-  const [localStorageIsLoading, setLocalStorageIsLoading] =
-    React.useState(true);
-  const [isCopied, setisCopied] = React.useState<Record<number, boolean>>({});
-  const [textToSpeech, setTextToSpeech] =
-    useState<SpeechSynthesisUtterance | null>(null);
-  const [isSpeaking, setIsSpeaking] = React.useState<Record<number, boolean>>(
-    {}
-  );
-  const [currentSpeakingIndex, setCurrentSpeakingIndex] = useState<
-    number | null
-  >(null);
+  const [name, setName] = useState<string>("");
+  const [localStorageIsLoading, setLocalStorageIsLoading] = useState(true);
+  const [isCopied, setisCopied] = useState<Record<number, boolean>>({});
+  const [textToSpeech, setTextToSpeech] = useState<SpeechSynthesisUtterance | null>(null);
+  const [isSpeaking, setIsSpeaking] = useState<Record<number, boolean>>({});
+  const [currentSpeakingIndex, setCurrentSpeakingIndex] = useState<number | null>(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -68,9 +53,7 @@ export default function ChatList({
     bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   };
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+  useEffect(() => { scrollToBottom() }, [messages]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -207,9 +190,7 @@ export default function ChatList({
                   </Avatar>
                   <span className="bg-accent p-3 rounded-r-md rounded-tl-md max-w-xs sm:max-w-xl overflow-x-auto">
                     {/* Check if the message content contains a code block */}
-                    {message.content
-                      .split("```")
-                      .map((part: string, index: number) => {
+                    {message.content.split("```").map((part: string, index: number) => {
                         if (index % 2 === 0) {
                           return (
                             <Markdown key={index} remarkPlugins={[remarkGfm]}>
@@ -231,8 +212,7 @@ export default function ChatList({
                     {/* Action buttons */}
                     <div className="pt-2 flex gap-1 items-center text-muted-foreground">
                       {/* Copy button */}
-                      {(!isLoading ||
-                        messages.indexOf(message) !== messages.length - 1) && (
+                      {(!isLoading || messages.indexOf(message) !== messages.length - 1) && (
                         <ButtonWithTooltip side="bottom" toolTipText="Copy">
                           <Button
                             onClick={copyToClipboard(message.content, index)}
@@ -293,8 +273,7 @@ export default function ChatList({
                     </div>
 
                     {/* Loading dots */}
-                    {loadingSubmit &&
-                      messages.indexOf(message) === messages.length - 1 && (
+                    {loadingSubmit && messages.indexOf(message) === messages.length - 1 && (
                         <MessageLoading />
                       )}
                   </span>

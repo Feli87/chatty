@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Button } from "../ui/button";
 import TextareaAutosize from "react-textarea-autosize";
 import { AnimatePresence } from "framer-motion";
@@ -8,7 +8,7 @@ import { StopIcon } from "@radix-ui/react-icons";
 import { ChatProps } from "@/lib/types";
 import useChatStore from "@/hooks/useChatStore";
 import FileLoader from "../file-loader";
-import { Mic, Send, SendHorizonal } from "lucide-react";
+import { Mic, SendHorizonal } from "lucide-react";
 import useSpeechToText from "@/hooks/useSpeechRecognition";
 
 interface MergedProps extends ChatProps {
@@ -22,12 +22,13 @@ export default function ChatBottombar({
   files,
   setFiles,
 }: MergedProps) {
+  
   const input = useChatStore((state) => state.input);
   const handleInputChange = useChatStore((state) => state.handleInputChange);
   const inputRef = React.useRef<HTMLTextAreaElement>(null);
 
   const isLoading = useChatStore((state) => state.isLoading);
-  const fileText = useChatStore((state) => state.fileText);
+  // const fileText = useChatStore((state) => state.fileText);
   const setFileText = useChatStore((state) => state.setFileText);
   const setInput = useChatStore((state) => state.setInput);
 
@@ -40,17 +41,16 @@ export default function ChatBottombar({
     }
   };
 
-  const { isListening, transcript, startListening, stopListening } =
-    useSpeechToText({ continuous: true });
+  const { isListening, transcript, startListening, stopListening } = useSpeechToText({ continuous: true });
 
   const listen = () => {
     isListening ? stopVoiceInput() : startListening();
   };
 
-  const stopVoiceInput = () => {
+  const stopVoiceInput = useCallback(() => {
     setInput(transcript.length ? transcript : "");
     stopListening();
-  };
+  },[setInput, stopListening, transcript]);
 
   const handleListenClick = () => {
     listen();
@@ -62,11 +62,12 @@ export default function ChatBottombar({
     }
   }, []);
 
-  useEffect(() => {
-    if (isLoading) {
-      stopVoiceInput();
-    }
-  }, [isLoading]);
+  // useEffect(() => {
+  //   if (isLoading) {
+  //     stopVoiceInput();
+  //   }
+  //   console.log("isLoading", isLoading);
+  // }, [isLoading, stopVoiceInput]);
 
   return (
     <div className="p-1 flex justify-between w-full items-center gap-2">

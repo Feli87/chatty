@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import EditCustomMemoryForm from "./edit-custom-memory-form";
 import { BookMarked } from "lucide-react";
@@ -17,10 +10,7 @@ interface CustomMemoryDialogProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function CustomMemoryDialog({
-  open,
-  setOpen,
-}: CustomMemoryDialogProps) {
+export default function CustomMemoryDialog({ open, setOpen }: CustomMemoryDialogProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className="w-full">
